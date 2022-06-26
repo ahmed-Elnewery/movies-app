@@ -1,16 +1,20 @@
 <template>
   <div id="app">
-  <h1 class="text-red-500">hello</h1>
+    <div class="flex flex-col h-screen">
+    <header class="h-14 bg-gradient-to-r from-purple-500 to-pink-500 "></header>
+    <main class="h-full" >
+      
+    </main>
+    <footer class="h-14 bg-gradient-to-r from-slate-500 to-slate-900 "></footer>
+    </div>
   </div>
 </template>
 
 <script>
-
 export default {
-  name: 'App',
-  components: {
-   }
-}
+  name: "App",
+  components: {},
+};
 </script>
 
 <style>
@@ -19,7 +23,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-body{
-  font-family: 'Roboto', sans-serif;
+body {
+  font-family: "Roboto", sans-serif;
 }
 </style>

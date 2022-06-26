@@ -1,19 +1,24 @@
 <template>
   <div id="app">
-    <div class="flex flex-col h-screen">
-    <header class="h-14 bg-gradient-to-r from-purple-500 to-pink-500 "></header>
-    <main class="h-full" >
-      
-    </main>
-    <footer class="h-14 bg-gradient-to-r from-slate-500 to-slate-900 "></footer>
+    <div class="flex flex-col min-h-screen">
+      <header
+        class="h-14 bg-gradient-to-r from-purple-500 to-pink-500"
+      ></header>
+      <main>
+        <MoviesListView />
+      </main>
+      <footer
+        class="h-14 bg-gradient-to-r from-slate-500 to-slate-900"
+      ></footer>
     </div>
   </div>
 </template>
 
 <script>
+import MoviesListView from "./views/MoviesListView.vue";
 export default {
   name: "App",
-  components: {},
+  components: { MoviesListView },
 };
 </script>
 

@@ -1,9 +1,7 @@
 <template>
   <div id="app">
     <div class="flex flex-col min-h-screen">
-      <header
-        class="h-14 bg-gradient-to-r from-purple-500 to-pink-500"
-      ></header>
+      <Header />
       <main>
         <MoviesListView />
       </main>
@@ -16,9 +14,10 @@
 
 <script>
 import MoviesListView from "./views/MoviesListView.vue";
+import Header from "./components/layout/Header.vue";
 export default {
   name: "App",
-  components: { MoviesListView },
+  components: { MoviesListView, Header },
 };
 </script>
 

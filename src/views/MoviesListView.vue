@@ -2,54 +2,49 @@
 import Container from "@/components/layout/Container.vue";
 import MovieSearch from "@/components/MovieSearch/index.vue";
 import axios from "axios";
+import MovieCard from "@/components/Movies/MovieCard.vue";
+import Spinner from "@/components/UI/Spinner.vue";
 export default {
-  components: { Container, MovieSearch },
+  components: { Container, MovieSearch, MovieCard, Spinner },
   data() {
     return {
+      loading: false,
       movies: [],
+      errorMsg: "",
     };
   },
   mounted() {
-    axios.get("http://localhost:3000/movies").then((res) => {
-      const { data } = res;
-      this.movies = data;
-    });
+    this.loading = true;
+    axios
+      .get("http://localhost:3000/movies")
+      .then((res) => {
+        const { data } = res;
+        this.movies = data;
+        this.loading = false;
+      })
+      .catch(() => {
+        this.errorMsg = "Opps! something went wrong";
+        this.loading = false;
+      });
   },
 };
 </script>
 <template>
-  <div>
+  <div class="h-full">
     <Container>
-      <div class="py-8">
+      <div class="h-full py-8 flex flex-col">
         <MovieSearch />
         <div class="flex justify-end mb-6">
           <div>
             <button type="button">toggle sorting</button>
           </div>
         </div>
-        <div class="grid gap-y-3">
-          <div
-            class="border rounded-md relative overflow-hidden shadow-lg"
-            v-for="movie in movies"
-            :key="movie.id"
-          >
-            <div class="flex">
-              <img :src="movie.image" />
-              <div class="p-4">
-                <h3>{{ movie.title }}</h3>
-                <div class="flex gap-x-4 mb-4">
-                  <span>{{ movie.year }}</span>
-                  <div class="flex items-center gap-x-1">
-                    <img width="20" src="../assets/SVG/star-solid.svg" />
-                    <span>{{ movie.imDbRating }}</span>
-                  </div>
-                </div>
-                <div>
-                  <p>{{ movie.crew }}</p>
-                  <p>{{ movie.fullTitle }}</p>
-                </div>
-              </div>
-            </div>
+        <div class="flex-grow">
+          <div class="flex items-center justify-center" v-if="loading">
+            <Spinner />
+          </div>
+          <div class="grid gap-y-3" v-else>
+            <MovieCard v-for="movie in movies" :key="movie.id" :movie="movie" />
           </div>
         </div>
         <div class="flex items-center justify-center mt-6">

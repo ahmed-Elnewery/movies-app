@@ -13,11 +13,15 @@ export default {
       ],
       toggle: "yes",
       msg: "",
+      inputText: "",
     };
   },
   methods: {
     increase() {
       this.counter++;
+    },
+    handleInputChange(value) {
+      this.inputText = value;
     },
   },
 };
@@ -41,7 +45,8 @@ export default {
     <input v-model.trim="msg" />
     <span>{{ msg }}</span>
     <div>
-      <Input />
+      <Input :value="inputText" @input="handleInputChange" />
+      <span>{{ inputText }}</span>
     </div>
   </div>
 </template>

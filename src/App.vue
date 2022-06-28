@@ -2,8 +2,9 @@
   <div id="app">
     <div class="flex flex-col min-h-screen">
       <Header />
-      <main>
+      <main class="flex-grow">
         <MoviesListView />
+        <!-- <Test /> -->
       </main>
       <footer
         class="h-14 bg-gradient-to-r from-slate-500 to-slate-900"
@@ -21,7 +22,6 @@ export default {
   components: {
     MoviesListView,
     Header,
-    // Test,
   },
 };
 </script>

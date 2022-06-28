@@ -27,12 +27,16 @@ export default {
       errorMsg: "",
       //pagination
       pageNum: 1,
+      //sort
+      sortType: "asc",
     };
   },
   mounted() {
     this.loading = true;
     axios
-      .get(`http://localhost:3000/movies/?_page=${this.pageNum}`)
+      .get(
+        `http://localhost:3000/movies/?_page=${this.pageNum}&&_sort=rank&_order=${this.sortType}`
+      )
       .then((res) => {
         const { data } = res;
         this.movies = data;
@@ -59,13 +63,21 @@ export default {
       }
       this.pageNum -= 1;
     },
+    toggleSort() {
+      this.pageNum = 1;
+      if (this.sortType === "asc") {
+        this.sortType = "desc";
+      } else if (this.sortType === "desc") {
+        this.sortType = "asc";
+      }
+    },
   },
   watch: {
     searchQuery() {
       if (!this.awaitingSearch) {
         setTimeout(() => {
           axios(
-            `http://localhost:3000/movies?q=${this.searchQuery}&&_page=${this.pageNum}`
+            `http://localhost:3000/movies/?_page=${this.pageNum}&q=${this.searchQuery}&_sort=rank&_order=${this.sortType}`
           ).then((res) => {
             if (res.data.length === 0) {
               this.noResultMessage =
@@ -86,7 +98,23 @@ export default {
       this.loading = true;
       axios
         .get(
-          `http://localhost:3000/movies/?_page=${this.pageNum}&&q=${this.searchQuery}`
+          `http://localhost:3000/movies/?_page=${this.pageNum}&q=${this.searchQuery}&_sort=rank&_order=${this.sortType}`
+        )
+        .then((res) => {
+          const { data } = res;
+          this.movies = data;
+          this.loading = false;
+        })
+        .catch(() => {
+          this.errorMsg = "Opps! something went wrong";
+          this.loading = false;
+        });
+    },
+    sortType() {
+      this.loading = true;
+      axios
+        .get(
+          `http://localhost:3000/movies/?_page=${this.pageNum}&q=${this.searchQuery}&_sort=rank&_order=${this.sortType}`
         )
         .then((res) => {
           const { data } = res;
@@ -106,9 +134,9 @@ export default {
     <Container>
       <div class="py-8">
         <MovieSearch :value="searchQuery" @input="onInputChange" />
-        <OptionsTab />
+        <OptionsTab :sortType="sortType" @toggleSort="toggleSort" />
         <div class="mb-10 min-h-[500px] flex items-center justify-center">
-          <h2 v-show="noResultMessage">{{ noResultMessage }}</h2>
+          <h2 v-if="noResultMessage">{{ noResultMessage }}</h2>
           <div
             class="flex items-center justify-center"
             v-if="loading | awaitingSearch"

@@ -17,6 +17,9 @@ export default {
   },
   data() {
     return {
+      searchQuery: "",
+      awaitingSearch: false,
+      noResultMessage: "",
       loading: false,
       movies: [],
       errorMsg: "",
@@ -36,16 +39,47 @@ export default {
         this.loading = false;
       });
   },
+  methods: {
+    onInputChange(value) {
+      this.searchQuery = value;
+    },
+  },
+  watch: {
+    searchQuery() {
+      let timerId = null;
+      clearTimeout(timerId);
+      if (!this.awaitingSearch) {
+        timerId = setTimeout(() => {
+          axios(`http://localhost:3000/movies?q=${this.searchQuery}`).then(
+            (res) => {
+              if (res.data.length === 0) {
+                this.noResultMessage =
+                  "Sorry! there is no movie match your search ";
+              }
+              this.movies = res.data;
+            }
+          );
+          this.awaitingSearch = false;
+        }, 1000);
+      }
+      this.noResultMessage = "";
+      this.awaitingSearch = true;
+    },
+  },
 };
 </script>
 <template>
   <div>
     <Container>
       <div class="py-8">
-        <MovieSearch />
+        <MovieSearch :value="searchQuery" @input="onInputChange" />
         <OptionsTab />
-        <div class="mb-10">
-          <div class="flex items-center justify-center" v-if="loading">
+        <div class="mb-10 min-h-[500px] flex items-center justify-center">
+          <h2 v-show="noResultMessage">{{ noResultMessage }}</h2>
+          <div
+            class="flex items-center justify-center"
+            v-if="loading | awaitingSearch"
+          >
             <Spinner />
           </div>
           <div class="grid gap-y-3" v-else>

@@ -1,35 +1,56 @@
 <script>
 import Container from "@/components/layout/Container.vue";
+import MovieSearch from "@/components/MovieSearch/index.vue";
+import axios from "axios";
 export default {
-  components: { Container },
+  components: { Container, MovieSearch },
+  data() {
+    return {
+      movies: [],
+    };
+  },
+  mounted() {
+    axios.get("http://localhost:3000/movies").then((res) => {
+      const { data } = res;
+      this.movies = data;
+    });
+  },
 };
 </script>
 <template>
   <div>
     <Container>
       <div class="py-8">
-        <div class="flex justify-center items-center mb-8">
-          <div class="w-2/3 sm:w-1/2">
-            <input
-              type="text"
-              class="w-full py-2.5 px-3 border border-gray-400 text-gray-800 rounded"
-              placeholder="Search for movie.."
-            />
-          </div>
-        </div>
+        <MovieSearch />
         <div class="flex justify-end mb-6">
           <div>
             <button type="button">toggle sorting</button>
           </div>
         </div>
         <div class="grid gap-y-3">
-          <div class="h-44 border rounded"></div>
-          <div class="h-44 border rounded"></div>
-          <div class="h-44 border rounded"></div>
-          <div class="h-44 border rounded"></div>
-          <div class="h-44 border rounded"></div>
-          <div class="h-44 border rounded"></div>
-          <div class="h-44 border rounded"></div>
+          <div
+            class="border rounded-md relative overflow-hidden shadow-lg"
+            v-for="movie in movies"
+            :key="movie.id"
+          >
+            <div class="flex">
+              <img :src="movie.image" />
+              <div class="p-4">
+                <h3>{{ movie.title }}</h3>
+                <div class="flex gap-x-4 mb-4">
+                  <span>{{ movie.year }}</span>
+                  <div class="flex items-center gap-x-1">
+                    <img width="20" src="../assets/SVG/star-solid.svg" />
+                    <span>{{ movie.imDbRating }}</span>
+                  </div>
+                </div>
+                <div>
+                  <p>{{ movie.crew }}</p>
+                  <p>{{ movie.fullTitle }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="flex items-center justify-center mt-6">
           <ul class="flex items-center gap-x-4">

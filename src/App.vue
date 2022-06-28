@@ -15,9 +15,14 @@
 <script>
 import MoviesListView from "./views/MoviesListView.vue";
 import Header from "./components/layout/Header.vue";
+// import Test from "./components/Test.vue";
 export default {
   name: "App",
-  components: { MoviesListView, Header },
+  components: {
+    MoviesListView,
+    Header,
+    // Test,
+  },
 };
 </script>
 

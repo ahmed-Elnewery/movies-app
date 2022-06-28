@@ -4,8 +4,17 @@ import MovieSearch from "@/components/MovieSearch/index.vue";
 import axios from "axios";
 import MovieCard from "@/components/Movies/MovieCard.vue";
 import Spinner from "@/components/UI/Spinner.vue";
+import MoviePagination from "@/components/Movies/MoviePagination.vue";
+import OptionsTab from "@/components/Movies/OptionsTab.vue";
 export default {
-  components: { Container, MovieSearch, MovieCard, Spinner },
+  components: {
+    Container,
+    MovieSearch,
+    MovieCard,
+    Spinner,
+    MoviePagination,
+    OptionsTab,
+  },
   data() {
     return {
       loading: false,
@@ -30,16 +39,12 @@ export default {
 };
 </script>
 <template>
-  <div class="h-full">
+  <div>
     <Container>
-      <div class="h-full py-8 flex flex-col">
+      <div class="py-8">
         <MovieSearch />
-        <div class="flex justify-end mb-6">
-          <div>
-            <button type="button">toggle sorting</button>
-          </div>
-        </div>
-        <div class="flex-grow">
+        <OptionsTab />
+        <div class="mb-10">
           <div class="flex items-center justify-center" v-if="loading">
             <Spinner />
           </div>
@@ -47,31 +52,7 @@ export default {
             <MovieCard v-for="movie in movies" :key="movie.id" :movie="movie" />
           </div>
         </div>
-        <div class="flex items-center justify-center mt-6">
-          <ul class="flex items-center gap-x-4">
-            <li>
-              <button
-                class="flex items-center justify-center bg-blue-400 hover:bg-blue-600 text-white w-8 h-8"
-              >
-                1
-              </button>
-            </li>
-            <li>
-              <button
-                class="flex items-center justify-center bg-blue-400 hover:bg-blue-600 text-white w-8 h-8"
-              >
-                2
-              </button>
-            </li>
-            <li>
-              <button
-                class="flex items-center justify-center bg-blue-400 hover:bg-blue-600 text-white w-8 h-8"
-              >
-                3
-              </button>
-            </li>
-          </ul>
-        </div>
+        <MoviePagination />
       </div>
     </Container>
   </div>

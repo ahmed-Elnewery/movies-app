@@ -17,18 +17,22 @@ export default {
   },
   data() {
     return {
+      // search
       searchQuery: "",
       awaitingSearch: false,
       noResultMessage: "",
+      //get all movies
       loading: false,
       movies: [],
       errorMsg: "",
+      //pagination
+      pageNum: 1,
     };
   },
   mounted() {
     this.loading = true;
     axios
-      .get("http://localhost:3000/movies")
+      .get(`http://localhost:3000/movies/?_page=${this.pageNum}`)
       .then((res) => {
         const { data } = res;
         this.movies = data;
@@ -43,27 +47,56 @@ export default {
     onInputChange(value) {
       this.searchQuery = value;
     },
+    nextPageHandler() {
+      if (this.pageNum === 25) {
+        return;
+      }
+      this.pageNum += 1;
+    },
+    prevPageHandler() {
+      if (this.pageNum === 1) {
+        return;
+      }
+      this.pageNum -= 1;
+    },
   },
   watch: {
     searchQuery() {
-      let timerId = null;
-      clearTimeout(timerId);
       if (!this.awaitingSearch) {
-        timerId = setTimeout(() => {
-          axios(`http://localhost:3000/movies?q=${this.searchQuery}`).then(
-            (res) => {
-              if (res.data.length === 0) {
-                this.noResultMessage =
-                  "Sorry! there is no movie match your search ";
-              }
-              this.movies = res.data;
+        setTimeout(() => {
+          axios(
+            `http://localhost:3000/movies?q=${this.searchQuery}&&_page=${this.pageNum}`
+          ).then((res) => {
+            if (res.data.length === 0) {
+              this.noResultMessage =
+                "Sorry! there is no movie match your search ";
             }
-          );
+            this.movies = res.data;
+            this.pageNum = 1;
+          });
+
           this.awaitingSearch = false;
         }, 1000);
       }
+
       this.noResultMessage = "";
       this.awaitingSearch = true;
+    },
+    pageNum() {
+      this.loading = true;
+      axios
+        .get(
+          `http://localhost:3000/movies/?_page=${this.pageNum}&&q=${this.searchQuery}`
+        )
+        .then((res) => {
+          const { data } = res;
+          this.movies = data;
+          this.loading = false;
+        })
+        .catch(() => {
+          this.errorMsg = "Opps! something went wrong";
+          this.loading = false;
+        });
     },
   },
 };
@@ -86,7 +119,13 @@ export default {
             <MovieCard v-for="movie in movies" :key="movie.id" :movie="movie" />
           </div>
         </div>
-        <MoviePagination />
+        <MoviePagination
+          :moviesLength="movies.length"
+          :pageNum="pageNum"
+          @next="nextPageHandler"
+          @prev="prevPageHandler"
+          v-if="movies.length > 0"
+        />
       </div>
     </Container>
   </div>

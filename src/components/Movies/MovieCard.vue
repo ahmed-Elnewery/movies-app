@@ -1,7 +1,10 @@
 <script>
 export default {
   props: {
-    movie: Object,
+    movie: {
+      type: Object,
+      required: true,
+    },
   },
 };
 </script>

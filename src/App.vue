@@ -3,8 +3,7 @@
     <div class="flex flex-col min-h-screen">
       <Header />
       <main class="flex-grow">
-        <MoviesListView />
-        <!-- <Test /> -->
+        <router-view></router-view>
       </main>
       <footer
         class="h-14 bg-gradient-to-r from-slate-500 to-slate-900"
@@ -14,13 +13,10 @@
 </template>
 
 <script>
-import MoviesListView from "./views/MoviesListView.vue";
 import Header from "./components/layout/Header.vue";
-// import Test from "./components/Test.vue";
 export default {
   name: "App",
   components: {
-    MoviesListView,
     Header,
   },
 };

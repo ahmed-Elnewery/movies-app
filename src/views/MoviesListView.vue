@@ -17,17 +17,14 @@ export default {
   },
   data() {
     return {
-      // search
       searchQuery: "",
       awaitingSearch: false,
-      noResultMessage: "",
-      //get all movies
+      noSearchResultMsg: "",
       loading: false,
       movies: [],
       errorMsg: "",
-      //pagination
       pageNum: 1,
-      //sort
+      totalCount: 0,
       sortType: "asc",
     };
   },
@@ -39,9 +36,6 @@ export default {
       this.searchQuery = value;
     },
     nextPageHandler() {
-      if (this.pageNum === 25) {
-        return;
-      }
       this.pageNum += 1;
     },
     prevPageHandler() {
@@ -62,10 +56,12 @@ export default {
       this.loading = true;
       axios
         .get(
-          `http://localhost:3000/movies/?_page=${this.pageNum}&&_sort=rank&_order=${this.sortType}`
+          `http://localhost:3000/movies/?_page=${this.pageNum}&q=${this.searchQuery}&_sort=rank&_order=${this.sortType}`
         )
         .then((res) => {
-          const { data } = res;
+          const { data, headers } = res;
+          const totalResult = headers["x-total-count"];
+          this.totalCount = parseInt(totalResult);
           this.movies = data;
           this.loading = false;
         })
@@ -83,9 +79,11 @@ export default {
             `http://localhost:3000/movies/?_page=${this.pageNum}&q=${this.searchQuery}&_sort=rank&_order=${this.sortType}`
           ).then((res) => {
             if (res.data.length === 0) {
-              this.noResultMessage =
+              this.noSearchResultMsg =
                 "Sorry! there is no movie match your search ";
             }
+            const totalResult = res.headers["x-total-count"];
+            this.totalCount = parseInt(totalResult);
             this.movies = res.data;
             this.pageNum = 1;
           });
@@ -94,7 +92,7 @@ export default {
         }, 1000);
       }
 
-      this.noResultMessage = "";
+      this.noSearchResultMsg = "";
       this.awaitingSearch = true;
     },
     pageNum() {
@@ -113,7 +111,7 @@ export default {
         <MovieSearch :value="searchQuery" @input="onInputChange" />
         <OptionsTab :sortType="sortType" @toggleSort="toggleSort" />
         <div class="mb-10 min-h-[500px] flex items-center justify-center">
-          <h2 v-if="noResultMessage">{{ noResultMessage }}</h2>
+          <h2 v-if="noSearchResultMsg">{{ noSearchResultMsg }}</h2>
           <div
             class="flex items-center justify-center"
             v-if="loading | awaitingSearch"
@@ -130,6 +128,7 @@ export default {
           @next="nextPageHandler"
           @prev="prevPageHandler"
           v-if="movies.length > 0"
+          :moviesCount="totalCount"
         />
       </div>
     </Container>

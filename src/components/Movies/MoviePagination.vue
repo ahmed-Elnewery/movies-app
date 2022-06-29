@@ -6,47 +6,52 @@ export default {
       type: Number,
       required: true,
     },
-    moviesLength: {
+    moviesCount: {
       type: Number,
     },
   },
   computed: {
-    isLastPage() {
-      return Math.ceil(this.moviesLength / 10);
+    noOfPages() {
+      return Math.ceil(this.moviesCount / 10);
     },
   },
 };
 </script>
 <template>
-  <div class="flex items-center justify-center">
-    <ul class="flex items-center gap-x-4">
-      <li>
+  <div>
+    <div class="flex items-center justify-center">
+      <ul class="flex items-center gap-x-4">
+        <li>
+          <button
+            type="button"
+            class="flex items-center justify-center bg-blue-400 hover:bg-blue-600 text-white p-2 disabled:cursor-not-allowed"
+            @click="$emit('prev')"
+            :disabled="pageNum === 1"
+          >
+            prev
+          </button>
+        </li>
+        <li>
+          <button
+            type="button"
+            class="flex items-center justify-center bg-blue-400 hover:bg-blue-600 text-white w-8 p-2"
+          >
+            {{ pageNum }}
+          </button>
+        </li>
         <button
           type="button"
           class="flex items-center justify-center bg-blue-400 hover:bg-blue-600 text-white p-2 disabled:cursor-not-allowed"
-          @click="$emit('prev')"
-          :disabled="pageNum === 1"
+          @click="$emit('next')"
+          :disabled="pageNum === noOfPages"
         >
-          prev
+          next
         </button>
-      </li>
-      <li>
-        <button
-          type="button"
-          class="flex items-center justify-center bg-blue-400 hover:bg-blue-600 text-white w-8 p-2"
-        >
-          {{ pageNum }}
-        </button>
-      </li>
-      <button
-        type="button"
-        class="flex items-center justify-center bg-blue-400 hover:bg-blue-600 text-white p-2 disabled:cursor-not-allowed"
-        @click="$emit('next')"
-        :disabled="pageNum === 25"
-      >
-        next
-      </button>
-    </ul>
+      </ul>
+    </div>
+    <!-- <div>pageNum{{ pageNum }}</div>
+    <div>noOfPages{{ noOfPages }}</div>
+    <div>moviesCount{{ moviesCount }}</div> -->
   </div>
 </template>
 

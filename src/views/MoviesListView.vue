@@ -32,20 +32,7 @@ export default {
     };
   },
   mounted() {
-    this.loading = true;
-    axios
-      .get(
-        `http://localhost:3000/movies/?_page=${this.pageNum}&&_sort=rank&_order=${this.sortType}`
-      )
-      .then((res) => {
-        const { data } = res;
-        this.movies = data;
-        this.loading = false;
-      })
-      .catch(() => {
-        this.errorMsg = "Opps! something went wrong";
-        this.loading = false;
-      });
+    this.fetchMovies();
   },
   methods: {
     onInputChange(value) {
@@ -71,6 +58,22 @@ export default {
         this.sortType = "asc";
       }
     },
+    fetchMovies() {
+      this.loading = true;
+      axios
+        .get(
+          `http://localhost:3000/movies/?_page=${this.pageNum}&&_sort=rank&_order=${this.sortType}`
+        )
+        .then((res) => {
+          const { data } = res;
+          this.movies = data;
+          this.loading = false;
+        })
+        .catch(() => {
+          this.errorMsg = "Opps! something went wrong";
+          this.loading = false;
+        });
+    },
   },
   watch: {
     searchQuery() {
@@ -95,36 +98,10 @@ export default {
       this.awaitingSearch = true;
     },
     pageNum() {
-      this.loading = true;
-      axios
-        .get(
-          `http://localhost:3000/movies/?_page=${this.pageNum}&q=${this.searchQuery}&_sort=rank&_order=${this.sortType}`
-        )
-        .then((res) => {
-          const { data } = res;
-          this.movies = data;
-          this.loading = false;
-        })
-        .catch(() => {
-          this.errorMsg = "Opps! something went wrong";
-          this.loading = false;
-        });
+      this.fetchMovies();
     },
     sortType() {
-      this.loading = true;
-      axios
-        .get(
-          `http://localhost:3000/movies/?_page=${this.pageNum}&q=${this.searchQuery}&_sort=rank&_order=${this.sortType}`
-        )
-        .then((res) => {
-          const { data } = res;
-          this.movies = data;
-          this.loading = false;
-        })
-        .catch(() => {
-          this.errorMsg = "Opps! something went wrong";
-          this.loading = false;
-        });
+      this.fetchMovies();
     },
   },
 };

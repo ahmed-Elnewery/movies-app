@@ -9,7 +9,7 @@ export default {
 };
 </script>
 <template>
-  <router-link :to="'movies/' + movie.id">
+  <router-link :to="'/movies/' + movie.id">
     <div class="border rounded-md relative overflow-hidden shadow-lg">
       <div class="flex">
         <img :src="movie.image" />

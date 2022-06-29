@@ -105,7 +105,7 @@ export default {
 };
 </script>
 <template>
-  <div>
+  <div class="wrapper">
     <Container>
       <div class="py-8">
         <MovieSearch :value="searchQuery" @input="onInputChange" />
@@ -134,4 +134,8 @@ export default {
     </Container>
   </div>
 </template>
-<style></style>
+<style scoped>
+.wrapper {
+  background: linear-gradient(to right bottom, #a9c9ff 0%, #ffbbec 100%);
+}
+</style>

@@ -24,28 +24,28 @@ export default {
         <li>
           <button
             type="button"
-            class="flex items-center justify-center bg-blue-400 hover:bg-blue-600 text-white p-2 disabled:cursor-not-allowed"
+            class="flex items-center justify-center bg-blue-400 hover:bg-blue-600 text-white transition p-2 disabled:cursor-not-allowed rounded"
             @click="$emit('prev')"
             :disabled="pageNum === 1"
           >
-            prev
+            Prev
           </button>
         </li>
         <li>
           <button
             type="button"
-            class="flex items-center justify-center bg-blue-400 hover:bg-blue-600 text-white w-8 p-2"
+            class="flex items-center justify-center bg-blue-400 hover:bg-blue-600 text-white transition w-8 px-3 py-2 rounded"
           >
             {{ pageNum }}
           </button>
         </li>
         <button
           type="button"
-          class="flex items-center justify-center bg-blue-400 hover:bg-blue-600 text-white p-2 disabled:cursor-not-allowed"
+          class="flex items-center justify-center bg-blue-400 hover:bg-blue-600 text-white p-2 transition disabled:cursor-not-allowed rounded"
           @click="$emit('next')"
           :disabled="pageNum === noOfPages"
         >
-          next
+          Next
         </button>
       </ul>
     </div>

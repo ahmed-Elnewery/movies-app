@@ -14,7 +14,7 @@ export default {
       <input
         type="text"
         class="w-full block py-2.5 pl-10 pr-3 border border-gray-400 text-gray-800 rounded"
-        placeholder="Search for movie.."
+        placeholder="Search For Movie.."
         :value="value"
         @input="$emit('input', $event.target.value)"
       />

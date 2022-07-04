@@ -60,6 +60,10 @@ export default {
         )
         .then((res) => {
           const { data, headers } = res;
+          if (data.length === 0 && this.searchQuery.length > 0) {
+            this.noSearchResultMsg =
+              "Sorry! there is no movie match your search ";
+          }
           const totalResult = headers["x-total-count"];
           this.totalCount = parseInt(totalResult);
           this.movies = data;
@@ -75,19 +79,7 @@ export default {
     searchQuery() {
       if (!this.awaitingSearch) {
         setTimeout(() => {
-          axios(
-            `http://localhost:3000/movies/?_page=${this.pageNum}&q=${this.searchQuery}&_sort=rank&_order=${this.sortType}`
-          ).then((res) => {
-            if (res.data.length === 0) {
-              this.noSearchResultMsg =
-                "Sorry! there is no movie match your search ";
-            }
-            const totalResult = res.headers["x-total-count"];
-            this.totalCount = parseInt(totalResult);
-            this.movies = res.data;
-            this.pageNum = 1;
-          });
-
+          this.fetchMovies();
           this.awaitingSearch = false;
         }, 1000);
       }

@@ -1,7 +1,9 @@
 <script>
+import TestA from "@/components/UI/TestA.vue";
 import { mapActions } from "vuex";
 
 export default {
+  components: { TestA },
   name: "TestPage",
   computed: {
     counter() {
@@ -21,6 +23,9 @@ export default {
     },
     incrementByTen() {
       this.$store.dispatch("incrementByPayload", { by: 10 });
+    },
+    clickMe: function () {
+      alert("hi");
     },
   },
   created() {
@@ -46,6 +51,9 @@ export default {
       >
         {{ movie.title }}
       </div>
+    </div>
+    <div class="mt-4">
+      <TestA :callback="clickMe" :arr="[1, 2, 3, 4]" />
     </div>
   </div>
 </template>
